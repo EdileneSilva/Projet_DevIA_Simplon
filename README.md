@@ -1,4 +1,3 @@
-```markdown
 # Projet de Visualisation et d’Analyse des Ventes
 
 Il s’agit d’un projet de **visualisation de données** développé en **Python**, à l’aide de deux bibliothèques principales : **pandas** et **plotly**.
@@ -33,7 +32,7 @@ GROUP BY produit;
 SELECT region, SUM(qte) AS quantite_totale
 FROM ventes
 GROUP BY region;
-````
+
 
 | Dimension   | Quantité totale (QTE) |
 | ----------- | --------------------- |
