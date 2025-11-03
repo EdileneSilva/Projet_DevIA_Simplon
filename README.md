@@ -1,4 +1,4 @@
-````
+```markdown
 # Projet de Visualisation et d’Analyse des Ventes
 
 Il s’agit d’un projet de **visualisation de données** développé en **Python**, à l’aide de deux bibliothèques principales : **pandas** et **plotly**.
