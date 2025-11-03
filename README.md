@@ -1,59 +1,78 @@
-# Qu'est-ce que c'est ?
+````markdown
+# 🧠 Projet de Visualisation et d’Analyse des Ventes
 
-Ceci est un projet de visualisation de données, qui utilise le langage de programmation Pyhton.
-Il utilise deux outils : [pandas](https://pandas.pydata.org/about/) et [plotly](https://plotly.com/python/).
+Il s’agit d’un projet de **visualisation de données** développé en **Python**, à l’aide de deux bibliothèques principales : **pandas** et **plotly**.
 
-- Pandas va nous permettre de télécharger un fichier de données CSV depuis une URL.
-- Plotly va nous permettre de générer des graphiques puis de les exporter en page web (au format HTML).
+---
 
-# Démarrer le projet dans GitHub Codespaces
-* Cliquez sur "Utiliser ce modèle" ("Use this template") en haut à droite de la page, puis sur "Créer un nouveau dépôt". [Voici les étapes pour créer un dépôt](https://docs.github.com/fr/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template). Si vous n'avez pas de compte GitHub, il vous sera demandé d'en créer un avant de pouvoir créer le dépôt.
-* Une fois dans votre dépôt, ouvrez le site dans un Codespace en cliquant sur Code > Codespaces, puis créez un nouveau Codespace sur votre branche principale.
+## Analyse SQL (résultats clés)
 
-<img alt="Créer un Codespace" src="https://github.com/user-attachments/assets/cb29a8da-d1ac-42f5-962c-7d43b8011324" width="400px"/><br/>
+Les premières analyses ont été effectuées dans l’environnement [SQLite Online](https://sqliteonline.com/) à partir de la table `ventes`.
 
-## Attendez que l’environnement de travail sur Codespace soit prêt
+### a. Chiffre d’affaires total
 
-L'environnement de travail Codespace va se construire automatiquement au premier lancement. Cela peut prendre plusieurs minutes.
+Le chiffre d’affaires (CA) global de l’ensemble des transactions s’élève à **44 825 €**.
 
-L’environnement est prêt lorsque vous voyez apparaître en bas de la page les boutons suivants :
+| Métrique | Requête SQL | Résultat |
+|-----------|--------------|----------|
+| CA total | `SELECT SUM(prix * qte) FROM ventes;` | **44 825 €** |
 
-    💬 MESSAGE DE BIENVENUE
+---
 
-    💻 TERMINAL
+### b. Ventes par produit et par région (quantité)
 
-    🔎 SPLIT
+Requêtes utilisées pour agréger les quantités vendues :
 
-    🏠 PREVIEW
+```sql
+-- Par produit :
+SELECT produit, SUM(qte) AS quantite_totale
+FROM ventes
+GROUP BY produit;
 
-➡️ Ne touchez à rien pendant le chargement.
+-- Par région :
+SELECT region, SUM(qte) AS quantite_totale
+FROM ventes
+GROUP BY region;
+````
 
-# Le projet
-## Comment ça marche ?
+| Dimension   | Quantité totale (QTE) |
+| ----------- | --------------------- |
+| Produit A   | 1 750                 |
+| Produit B   | 1 055                 |
+| Produit C   | 575                   |
+| Région Nord | 1 475                 |
+| Région Sud  | 1 805                 |
 
-* `README.md`: Il s'agit de ce fichier, que vous lisez en ce moment même.
+**Conclusion :**
+Le **Produit A** est le plus vendu, et la **Région Sud** enregistre le volume de ventes le plus élevé, légèrement supérieur à celui de la Région Nord (≈ **5 %** d’écart).
 
-* `app.py`: ceci est un fichier python, le coeur du projet.
+---
 
-Pour executer le fichier Python et ainsi générer un graphique sous forme de page web, cliquez sur le bouton "💻 TERMINAL" depuis la barre d'outils en bas de page.
+## Visualisation avec Python et Plotly
 
-Puis écrivez la commande suivante : `python3 app.py`.
+Le fichier `app.py` implémente le calcul du chiffre d’affaires et génère les visualisations.
 
-Cette commande se divise en deux partie : 
-- d'abord "python3" qui indique que l'on souhaite utiliser Python, et plus précisemment, la version 3.
-- Puis "app.py" qui indique que l'on souhaite exécuter le programme python contenu dans le fichier "app.py" (avec Python3 donc).
+### Graphique 1 : Ventes par région
 
-Appuyez sur la touche `Entrée` de votre clavier, après quelques secondes d'exécution, vous devriez obtenir un message de succès.
+**Objectif :** Visualiser la répartition des ventes entre les deux régions.
+**Analyse :** La **Région Sud** domine légèrement (≈ **5 %** d’écart).
+![Graphique des ventes par région)](ventes_par_region.png)
 
-## Observer son résultat
+### Graphique 2 : Ventes par produit
 
-Cliquez sur le bouton "🏠 PREVIEW" depuis la barre d'outils en bas de page.
-Depuis la nouvelle fenêtre de votre navigateur qui vient de s'ouvrir, sélectionner le fichier "ventes-par-region.html".
+**Objectif :** Comparer le volume d’unités vendues par produit.
+**Analyse :** Le **Produit A** domine avec **1 750** unités, tandis que le **Produit C** est le moins vendu (**575**).
+![Graphique des ventes par région)](ventes_par_produit.png)
 
-Vous venez d'ouvrir le graphique en version web généré par le fichier "app.py" exécuté avec Python3 !
+### Graphique 3 : Chiffre d’affaires par produit
 
-Prenez le temps de lire, d'analyser voir même de bidouiller le fichier "app.py" puis lancez-vous dans les consignes du projet pour la sélection Simplon !
+**Objectif :** Comparer la valeur totale générée par chaque produit.
+**Analyse :** Le **Produit A** génère **17 500 €**, et le **Produit B** atteint **15 825 €** grâce à un **prix unitaire plus élevé**, malgré un volume inférieur.
+![Graphique des ventes par région)](ca_par_produit.png)
 
-# Publier vos modifications sur votre propre dépôt GitHub
-Une fois que vous avez terminé de travailler sur les consignes du projet et que vous souhaitez publier vos modifications dans votre dépôt, vous devrez suivre les étapes décrites dans la section « Validation (commit) de vos modifications » de [cette ressource](https://docs.github.com/fr/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace#validation-commit-de-vos-modifications
-).
+### Graphique 4 : Chiffre d’affaires (diagramme en barres)
+
+**Objectif :** Mettre en évidence les montants du chiffre d’affaires sur l’axe vertical (Y) pour une lecture plus claire.
+![Graphique des ventes par région)](ca_par_produit_bar.png)
+```
+```
